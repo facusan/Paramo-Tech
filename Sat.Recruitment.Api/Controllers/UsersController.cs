@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sat.Recruitment.Api.Models;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -41,10 +42,10 @@ namespace Sat.Recruitment.Api.Controllers
                     return Conflict("The user is duplicated");
                 }
             }
-            catch
+            catch(Exception e)
             {
-                Debug.WriteLine("The user is duplicated");
-                return Problem("The user is duplicated");
+                Debug.WriteLine(e.Message);
+                return Problem();
             }
         }
 
