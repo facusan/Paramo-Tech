@@ -17,16 +17,12 @@ namespace Sat.Recruitment.Api.Controllers
 
         [HttpPost]
         [Route("/create-user")]
-        public async Task<IActionResult> CreateUser(string name, string email, string address, string phone, string userType, string money)
+        public async Task<IActionResult> CreateUser(User user)
         {
-            var errors = "";
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            ValidateErrors(name, email, address, phone, ref errors);
-
-            if (errors != null && errors != "")
-                return BadRequest(errors);
-
-            User newUser = UserFactory.Create(name, email, address, phone, userType, money);
+            User newUser = UserFactory.Create(user);
 
             try
             {
@@ -47,23 +43,6 @@ namespace Sat.Recruitment.Api.Controllers
                 Debug.WriteLine(e.Message);
                 return Problem();
             }
-        }
-
-        //Validate errors
-        private void ValidateErrors(string name, string email, string address, string phone, ref string errors)
-        {
-            if (name == null)
-                //Validate if Name is null
-                errors = "The name is required";
-            if (email == null)
-                //Validate if Email is null
-                errors = errors + " The email is required";
-            if (address == null)
-                //Validate if Address is null
-                errors = errors + " The address is required";
-            if (phone == null)
-                //Validate if Phone is null
-                errors = errors + " The phone is required";
         }
     }
 }

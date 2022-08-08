@@ -1,41 +1,83 @@
-using System;
-using System.Dynamic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using Sat.Recruitment.Api.Controllers;
-
+using Sat.Recruitment.Api.Models;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Sat.Recruitment.Test
 {
-    [CollectionDefinition("Tests", DisableParallelization = true)]
-    public class UserControllerTester
+    [CollectionDefinition("UserControllerTester", DisableParallelization = true)]
+    public class UserControllerTester : IClassFixture<WebApplicationFactory<Api.Startup>>
     {
+        private readonly HttpClient _client;
+        public UserControllerTester(WebApplicationFactory<Api.Startup> factory)
+        {
+            _client = factory.CreateClient();
+        }
+
         [Fact]
         public async void CreateUserOkTest()
         {
-            var userController = new UsersController();
+            var newUser = new User
+            {
+                Name = "Mike",
+                Email = "mike@gmail.com",
+                Address = "Av. Juan G",
+                Phone = "+349 1122354215",
+                UserType = "Normal",
+                Money = 124
+            };
 
-            var result = await userController.CreateUser("Mike", "mike@gmail.com", "Av. Juan G", "+349 1122354215", "Normal", "124");
-            var okResult = result as OkObjectResult;
+            var result = await CreateUserAsync(_client, newUser);
 
-            Assert.NotNull(okResult);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, (int)result.StatusCode);
         }
 
         [Fact]
         public async void CreateDuplicatedUserErrorTest()
         {
-            var userController = new UsersController();
+            var newUser = new User
+            {
+                Name = "Agustina",
+                Email = "Agustina@gmail.com",
+                Address = "Av. Juan G",
+                Phone = "+349 1122354215",
+                UserType = "Normal",
+                Money = 124
+            };
+            var result = await CreateUserAsync(_client, newUser);
+            var resultMessage = await result.Content.ReadAsStringAsync();
 
-            var result = await userController.CreateUser("Agustina", "Agustina@gmail.com", "Av. Juan G", "+349 1122354215", "Normal", "124");
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status409Conflict,(int) result.StatusCode);
+            Assert.Equal("The user is duplicated", resultMessage);
+        }
 
-            var conflictObjectResult = result as ConflictObjectResult;
+        [Fact]
+        public async void CreateUserWithoutRequiredDataErrorTest()
+        {
+            var newUser = new User();
+            var result = await CreateUserAsync(_client, newUser);
+            var resultMessage = await result.Content.ReadAsStringAsync();
 
-            Assert.NotNull(conflictObjectResult);
-            Assert.Equal(StatusCodes.Status409Conflict, conflictObjectResult.StatusCode);
-            Assert.Equal("The user is duplicated", conflictObjectResult.Value);
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, (int)result.StatusCode);
+        }
+
+        private static async Task<HttpResponseMessage> CreateUserAsync(HttpClient client, User newUser)
+        {
+            return await client.PostAsync("/create-user",
+                new StringContent(JsonConvert.SerializeObject(newUser), Encoding.UTF8)
+                {
+                    Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
+                });
         }
     }
 }
