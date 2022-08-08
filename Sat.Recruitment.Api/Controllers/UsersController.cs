@@ -5,12 +5,6 @@ using System.Threading.Tasks;
 
 namespace Sat.Recruitment.Api.Controllers
 {
-    public class Result
-    {
-        public bool IsSuccess { get; set; }
-        public string Errors { get; set; }
-    }
-
     [ApiController]
     [Route("[controller]")]
     public partial class UsersController : ControllerBase
@@ -22,61 +16,36 @@ namespace Sat.Recruitment.Api.Controllers
 
         [HttpPost]
         [Route("/create-user")]
-        public async Task<Result> CreateUser(string name, string email, string address, string phone, string userType, string money)
+        public async Task<IActionResult> CreateUser(string name, string email, string address, string phone, string userType, string money)
         {
             var errors = "";
 
             ValidateErrors(name, email, address, phone, ref errors);
 
             if (errors != null && errors != "")
-                return new Result()
-                {
-                    IsSuccess = false,
-                    Errors = errors
-                };
+                return BadRequest(errors);
 
             User newUser = UserFactory.Create(name, email, address, phone, userType, money);
 
             try
             {
-
                 var isDuplicated = new DuplicatedUserFinder().Find(newUser);
                 if (!isDuplicated)
                 {
                     Debug.WriteLine("User Created");
-
-                    return new Result()
-                    {
-                        IsSuccess = true,
-                        Errors = "User Created"
-                    };
+                    return Ok("User Created");
                 }
                 else
                 {
                     Debug.WriteLine("The user is duplicated");
-
-                    return new Result()
-                    {
-                        IsSuccess = false,
-                        Errors = "The user is duplicated"
-                    };
+                    return Conflict("The user is duplicated");
                 }
             }
             catch
             {
                 Debug.WriteLine("The user is duplicated");
-                return new Result()
-                {
-                    IsSuccess = false,
-                    Errors = "The user is duplicated"
-                };
+                return Problem("The user is duplicated");
             }
-
-            return new Result()
-            {
-                IsSuccess = true,
-                Errors = "User Created"
-            };
         }
 
         //Validate errors
