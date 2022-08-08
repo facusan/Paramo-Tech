@@ -54,6 +54,7 @@ namespace Sat.Recruitment.Api
                 }
             }
 
+            newUser.Email = EmailNormalizer.Normalize(newUser.Email);
             return newUser;
         }
     }

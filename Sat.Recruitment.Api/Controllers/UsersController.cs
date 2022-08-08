@@ -43,15 +43,6 @@ namespace Sat.Recruitment.Api.Controllers
 
             var reader = ReadUsersFromFile();
 
-            //Normalize email
-            var aux = newUser.Email.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var atIndex = aux[0].IndexOf("+", StringComparison.Ordinal);
-
-            aux[0] = atIndex < 0 ? aux[0].Replace(".", "") : aux[0].Replace(".", "").Remove(atIndex);
-
-            newUser.Email = string.Join("@", new string[] { aux[0], aux[1] });
-
             while (reader.Peek() >= 0)
             {
                 var line = reader.ReadLineAsync().Result;
