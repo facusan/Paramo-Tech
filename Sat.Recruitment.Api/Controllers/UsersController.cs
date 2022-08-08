@@ -10,13 +10,13 @@ namespace Sat.Recruitment.Api.Controllers
     [Route("[controller]")]
     public partial class UsersController : ControllerBase
     {
-
+        public const string CreateUserRoute = "/create-user";
         public UsersController()
         {
         }
 
         [HttpPost]
-        [Route("/create-user")]
+        [Route(CreateUserRoute)]
         public async Task<IActionResult> CreateUser(User user)
         {
             User newUser = UserFactory.Create(user);

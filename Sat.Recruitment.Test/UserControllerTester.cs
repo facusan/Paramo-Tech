@@ -72,7 +72,7 @@ namespace Sat.Recruitment.Test
 
         private static async Task<HttpResponseMessage> CreateUserAsync(HttpClient client, User newUser)
         {
-            return await client.PostAsync("/create-user",
+            return await client.PostAsync(UsersController.CreateUserRoute,
                 new StringContent(JsonConvert.SerializeObject(newUser), Encoding.UTF8)
                 {
                     Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
