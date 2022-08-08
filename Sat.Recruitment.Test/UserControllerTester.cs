@@ -65,7 +65,6 @@ namespace Sat.Recruitment.Test
         {
             var newUser = new User();
             var result = await CreateUserAsync(_client, newUser);
-            var resultMessage = await result.Content.ReadAsStringAsync();
 
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status400BadRequest, (int)result.StatusCode);

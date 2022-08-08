@@ -1,20 +1,21 @@
 ﻿using Sat.Recruitment.Api.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Sat.Recruitment.Api
 {
     public class DuplicatedUserFinder
     {
         private readonly List<User> _users = new List<User>();
-        public bool Find(User newUser)
+        public async Task<bool> FindAsync(User newUser)
         {
             var reader = ReadUsersFromFile();
 
 
             while (reader.Peek() >= 0)
             {
-                var line = reader.ReadLineAsync().Result;
+                var line = await reader.ReadLineAsync();
                 var user = new User
                 {
                     Name = line.Split(',')[0].ToString(),

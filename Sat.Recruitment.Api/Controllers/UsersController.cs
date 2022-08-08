@@ -19,14 +19,10 @@ namespace Sat.Recruitment.Api.Controllers
         [Route("/create-user")]
         public async Task<IActionResult> CreateUser(User user)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             User newUser = UserFactory.Create(user);
-
             try
             {
-                var isDuplicated = new DuplicatedUserFinder().Find(newUser);
+                var isDuplicated = await new DuplicatedUserFinder().FindAsync(newUser);
                 if (!isDuplicated)
                 {
                     Debug.WriteLine("User Created");
