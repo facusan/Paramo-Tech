@@ -11,8 +11,10 @@ namespace Sat.Recruitment.Api.Controllers
     public partial class UsersController : ControllerBase
     {
         public const string CreateUserRoute = "/create-user";
-        public UsersController()
+        private readonly IUserRepository _userRepository;
+        public UsersController(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -22,7 +24,7 @@ namespace Sat.Recruitment.Api.Controllers
             User newUser = UserFactory.Create(user);
             try
             {
-                var isDuplicated = await new DuplicatedUserFinder().FindAsync(newUser);
+                var isDuplicated = await _userRepository.ExistsAsync(newUser);
                 if (!isDuplicated)
                 {
                     Debug.WriteLine("User Created");
