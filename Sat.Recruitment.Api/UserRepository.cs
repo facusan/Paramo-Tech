@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Sat.Recruitment.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,14 +9,23 @@ namespace Sat.Recruitment.Api
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _pathFile;
+        private const string SeparatorChar = ",";
+        
         public UserRepository(IConfiguration iConfig)
         {
-            _configuration = iConfig;
+            _pathFile = Directory.GetCurrentDirectory() + iConfig.GetValue<string>("Settings:UserFilePath");
         }
+
         public void Add(User user)
         {
-            throw new System.NotImplementedException();
+            using StreamWriter sw = File.AppendText(_pathFile);
+            var money = user.Money.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var fieldsToAdd = new string[] 
+            { 
+                user.Name, user.Email, user.Phone, user.Address, user.UserType, money
+            };
+            sw.WriteLine($"{string.Join(SeparatorChar, fieldsToAdd)}");
         }
 
         public async Task<bool> ExistsAsync(User user)
@@ -38,15 +48,13 @@ namespace Sat.Recruitment.Api
         public async Task<List<User>> FindAllAsync()
         {
             List<User> users = new List<User>();
-            var path = Directory.GetCurrentDirectory() + _configuration.GetValue<string>("Settings:UserFilePath");
-
-            FileStream fileStream = new FileStream(path, FileMode.Open);
+            FileStream fileStream = new FileStream(_pathFile, FileMode.Open);
             StreamReader reader = new StreamReader(fileStream);
 
             while (reader.Peek() >= 0)
             {
                 var line = await reader.ReadLineAsync();
-                var lineSplitted = line.Split(',');
+                var lineSplitted = line.Split(SeparatorChar);
                 var user = new User
                 {
                     Name = lineSplitted[0].ToString(),
