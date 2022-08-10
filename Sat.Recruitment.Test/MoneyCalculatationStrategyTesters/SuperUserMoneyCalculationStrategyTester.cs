@@ -2,27 +2,27 @@
 using Sat.Recruitment.Api.Models;
 using Xunit;
 
-namespace Sat.Recruitment.Test
+namespace Sat.Recruitment.Test.MoneyCalculatationStrategyTesters
 {
     [CollectionDefinition("UserMoneyCalculationStrategyTester")]
-    public class PremiumUserMoneyCalculationStrategyTester
+    public class SuperUserMoneyCalculationStrategyTester
     {
         [Fact]
-        public void PremiumUserWithMoreThan10OfMoneyIsModifiedTest()
+        public void SuperUserWithMoreThan10OfMoneyIsModifiedTest()
         {
             var user = new User
             {
                 Money = 101
             };
-            
-            SetPremiumUserMoneyCalculationStrategyAndCalculate(user);
-            
-            Assert.Equal(303, user.Money);
+
+            SetSuperUserMoneyCalculationStrategyAndCalculate(user);
+
+            Assert.Equal((decimal)121.2, user.Money);
         }
 
-        private static void SetPremiumUserMoneyCalculationStrategyAndCalculate(User user)
+        private static void SetSuperUserMoneyCalculationStrategyAndCalculate(User user)
         {
-            user.SetMoneyCalculationStrategy(new PremiumUserMoneyCalculationStrategy());
+            user.SetMoneyCalculationStrategy(new SuperUserMoneyCalculationStrategy());
             user.CalculateFinalMoney();
         }
 
@@ -34,7 +34,7 @@ namespace Sat.Recruitment.Test
                 Money = 100
             };
 
-            SetPremiumUserMoneyCalculationStrategyAndCalculate(user);
+            SetSuperUserMoneyCalculationStrategyAndCalculate(user);
 
             Assert.Equal(100, user.Money);
         }
@@ -47,7 +47,7 @@ namespace Sat.Recruitment.Test
                 Money = 1
             };
 
-            SetPremiumUserMoneyCalculationStrategyAndCalculate(user);
+            SetSuperUserMoneyCalculationStrategyAndCalculate(user);
 
             Assert.Equal(1, user.Money);
         }
