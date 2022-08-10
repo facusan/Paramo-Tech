@@ -1,11 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sat.Recruitment.Api.Models
 {
     public class User
     {
+        public const string NormalUserType = "Normal";
+        public const string SuperUserType = "Super";
+        public const string PremiumUserType = "Premium";
+
         [Required]
         public string Name { get; set; }
         [Required]
@@ -33,20 +35,25 @@ namespace Sat.Recruitment.Api.Models
 
         public void Normalize()
         {
-            if (UserType == "Normal")
+            SetMoneyCalculationStrategyBasedOnUserType();
+            CalculateFinalMoney();
+            Email = EmailNormalizer.Normalize(Email);
+        }
+
+        private void SetMoneyCalculationStrategyBasedOnUserType()
+        {
+            if (UserType == NormalUserType)
             {
                 SetMoneyCalculationStrategy(new NormalUserMoneyCalculationStrategy());
             }
-            if (UserType == "SuperUser")
+            if (UserType == SuperUserType)
             {
                 SetMoneyCalculationStrategy(new SuperUserMoneyCalculationStrategy());
             }
-            if (UserType == "Premium")
+            if (UserType == PremiumUserType)
             {
                 SetMoneyCalculationStrategy(new PremiumUserMoneyCalculationStrategy());
             }
-            CalculateFinalMoney();
-            Email = EmailNormalizer.Normalize(Email);
         }
     }
 }

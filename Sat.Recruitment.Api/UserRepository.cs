@@ -1,4 +1,5 @@
-﻿using Sat.Recruitment.Api.Models;
+﻿using Microsoft.Extensions.Configuration;
+using Sat.Recruitment.Api.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,6 +8,11 @@ namespace Sat.Recruitment.Api
 {
     public class UserRepository : IUserRepository
     {
+        private readonly IConfiguration _configuration;
+        public UserRepository(IConfiguration iConfig)
+        {
+            _configuration = iConfig;
+        }
         public void Add(User user)
         {
             throw new System.NotImplementedException();
@@ -17,22 +23,22 @@ namespace Sat.Recruitment.Api
             var users = await FindAllAsync();
             foreach (var currentUser in users)
             {
-                if (user.Email == currentUser.Email || user.Phone == currentUser.Phone)
-                {
+                if (EmailOrPhoneExist(user, currentUser) || NameAndAddressExist(user, currentUser))
                     return true;
-                }
-                if (user.Name == currentUser.Name && user.Address == currentUser.Address)
-                {
-                    return true;
-                }
             }
             return false;
         }
 
+        private static bool EmailOrPhoneExist(User user, User currentUser) =>
+            user.Email == currentUser.Email || user.Phone == currentUser.Phone;
+
+        private static bool NameAndAddressExist(User user, User currentUser) =>
+            user.Name == currentUser.Name && user.Address == currentUser.Address;
+
         public async Task<List<User>> FindAllAsync()
         {
             List<User> users = new List<User>();
-            var path = Directory.GetCurrentDirectory() + "/Files/Users.txt";
+            var path = Directory.GetCurrentDirectory() + _configuration.GetValue<string>("Settings:UserFilePath");
 
             FileStream fileStream = new FileStream(path, FileMode.Open);
             StreamReader reader = new StreamReader(fileStream);

@@ -6,13 +6,13 @@ namespace Sat.Recruitment.Api
     {
         public static string Normalize(string email)
         {
-            var aux = email.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
+            var emailSplittedByAt = email.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
+            var firstPartOfEmailBeforeAt = emailSplittedByAt[0];
+            var plusCharIndex = firstPartOfEmailBeforeAt.IndexOf("+", StringComparison.Ordinal);
 
-            var atIndex = aux[0].IndexOf("+", StringComparison.Ordinal);
+            firstPartOfEmailBeforeAt = plusCharIndex < 0 ? firstPartOfEmailBeforeAt.Replace(".", "") : firstPartOfEmailBeforeAt.Replace(".", "").Remove(plusCharIndex);
 
-            aux[0] = atIndex < 0 ? aux[0].Replace(".", "") : aux[0].Replace(".", "").Remove(atIndex);
-
-            return string.Join("@", new string[] { aux[0], aux[1] });
+            return string.Join("@", new string[] { firstPartOfEmailBeforeAt, emailSplittedByAt[1] });
         }
     }
 }
