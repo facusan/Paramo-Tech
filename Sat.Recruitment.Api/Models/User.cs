@@ -30,5 +30,23 @@ namespace Sat.Recruitment.Api.Models
         {
             Money = _moneyCalculatationStrategy.Calulate(this);
         }
+
+        public void Normalize()
+        {
+            if (UserType == "Normal")
+            {
+                SetMoneyCalculationStrategy(new NormalUserMoneyCalculationStrategy());
+            }
+            if (UserType == "SuperUser")
+            {
+                SetMoneyCalculationStrategy(new SuperUserMoneyCalculationStrategy());
+            }
+            if (UserType == "Premium")
+            {
+                SetMoneyCalculationStrategy(new PremiumUserMoneyCalculationStrategy());
+            }
+            CalculateFinalMoney();
+            Email = EmailNormalizer.Normalize(Email);
+        }
     }
 }

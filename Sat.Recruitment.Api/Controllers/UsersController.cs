@@ -21,10 +21,10 @@ namespace Sat.Recruitment.Api.Controllers
         [Route(CreateUserRoute)]
         public async Task<IActionResult> CreateUser(User user)
         {
-            User newUser = UserFactory.Create(user);
             try
             {
-                var isDuplicated = await _userRepository.ExistsAsync(newUser);
+                user.Normalize();
+                var isDuplicated = await _userRepository.ExistsAsync(user);
                 if (!isDuplicated)
                 {
                     Debug.WriteLine("User Created");
