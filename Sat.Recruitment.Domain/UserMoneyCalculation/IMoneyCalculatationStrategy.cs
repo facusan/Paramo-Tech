@@ -1,6 +1,4 @@
-﻿using Sat.Recruitment.Api.Models;
-
-namespace Sat.Recruitment.Api
+﻿namespace Sat.Recruitment.Domain.UserMoneyCalculation
 {
     public interface IMoneyCalculatationStrategy
     {

@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Sat.Recruitment.Api.Models;
+using Sat.Recruitment.Domain;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Sat.Recruitment.Api
+namespace Sat.Recruitment.Data
 {
-    public class UserRepository : IUserRepository
+    public class UserFileRepository : IUserRepository
     {
         private readonly string _pathFile;
         private const string SeparatorChar = ",";
         
-        public UserRepository(IConfiguration iConfig)
+        public UserFileRepository(IConfiguration iConfig)
         {
-            _pathFile = Directory.GetCurrentDirectory() + iConfig.GetValue<string>("Settings:UserFilePath");
+            _pathFile = Directory.GetCurrentDirectory() + iConfig.GetSection("Settings")["UserFilePath"];
         }
 
         public void Add(User user)

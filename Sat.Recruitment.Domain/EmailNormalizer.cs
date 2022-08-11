@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sat.Recruitment.Api
+namespace Sat.Recruitment.Domain
 {
     public class EmailNormalizer
     {
@@ -10,7 +10,9 @@ namespace Sat.Recruitment.Api
             var firstPartOfEmailBeforeAt = emailSplittedByAt[0];
             var plusCharIndex = firstPartOfEmailBeforeAt.IndexOf("+", StringComparison.Ordinal);
 
-            firstPartOfEmailBeforeAt = plusCharIndex < 0 ? firstPartOfEmailBeforeAt.Replace(".", "") : firstPartOfEmailBeforeAt.Replace(".", "").Remove(plusCharIndex);
+            firstPartOfEmailBeforeAt = plusCharIndex < 0 
+                ? firstPartOfEmailBeforeAt.Replace(".", "") 
+                : firstPartOfEmailBeforeAt.Replace(".", "").Remove(plusCharIndex);
 
             return string.Join("@", new string[] { firstPartOfEmailBeforeAt, emailSplittedByAt[1] });
         }

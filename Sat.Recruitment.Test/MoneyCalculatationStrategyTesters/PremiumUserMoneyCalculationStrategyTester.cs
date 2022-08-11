@@ -1,5 +1,5 @@
-﻿using Sat.Recruitment.Api;
-using Sat.Recruitment.Api.Models;
+﻿using Sat.Recruitment.Domain;
+using Sat.Recruitment.Domain.UserMoneyCalculation;
 using Xunit;
 
 namespace Sat.Recruitment.Test.MoneyCalculatationStrategyTesters

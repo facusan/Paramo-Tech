@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sat.Recruitment.Api.Models;
+using Microsoft.Extensions.Logging;
+using Sat.Recruitment.Domain;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Sat.Recruitment.Api.Controllers
@@ -12,9 +12,12 @@ namespace Sat.Recruitment.Api.Controllers
     {
         public const string CreateUserRoute = "/users";
         private readonly IUserRepository _userRepository;
-        public UsersController(IUserRepository userRepository)
+        private readonly ILogger _logger;
+
+        public UsersController(IUserRepository userRepository, ILogger<UsersController> logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -24,21 +27,21 @@ namespace Sat.Recruitment.Api.Controllers
             {
                 user.Normalize();
                 var isDuplicated = await _userRepository.ExistsAsync(user);
-                if (!isDuplicated)
+                if(isDuplicated)
                 {
-                    _userRepository.Add(user);
-                    Debug.WriteLine("User Created");
-                    return Ok("User Created");
+                    var userNotCreatedBecauseIsDuplicatedMessage = $"User {user.Email} not created because is duplicated";
+                    _logger.LogError(userNotCreatedBecauseIsDuplicatedMessage, user);
+                    return Conflict(userNotCreatedBecauseIsDuplicatedMessage);
                 }
-                else
-                {
-                    Debug.WriteLine("The user is duplicated");
-                    return Conflict("The user is duplicated");
-                }
+
+                _userRepository.Add(user);
+                var userCreatedMessage = $"User {user.Email} created";
+                _logger.LogInformation(userCreatedMessage);
+                return Ok(userCreatedMessage);
             }
             catch(Exception e)
             {
-                Debug.WriteLine(e.Message);
+                _logger.LogCritical(e.ToString());
                 return Problem();
             }
         }

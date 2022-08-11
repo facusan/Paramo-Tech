@@ -1,7 +1,6 @@
-﻿using Sat.Recruitment.Api.Models;
-using System;
+﻿using System;
 
-namespace Sat.Recruitment.Api
+namespace Sat.Recruitment.Domain.UserMoneyCalculation
 {
     public class SuperUserMoneyCalculationStrategy : IMoneyCalculatationStrategy
     {

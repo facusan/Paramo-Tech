@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Sat.Recruitment.Domain.UserMoneyCalculation;
+using System.ComponentModel.DataAnnotations;
 
-namespace Sat.Recruitment.Api.Models
+namespace Sat.Recruitment.Domain
 {
     public class User
     {

@@ -1,7 +1,6 @@
-﻿using Sat.Recruitment.Api.Models;
-using System;
+﻿using System;
 
-namespace Sat.Recruitment.Api
+namespace Sat.Recruitment.Domain.UserMoneyCalculation
 {
     public class NormalUserMoneyCalculationStrategy : IMoneyCalculatationStrategy
     {
@@ -13,11 +12,11 @@ namespace Sat.Recruitment.Api
                 var gif = user.Money * percentage;
                 return user.Money + gif;
             }
-            if (user.Money > 10 && user.Money < 100 )
+            if (user.Money > 10 && user.Money < 100)
             {
                 var percentage = Convert.ToDecimal(0.8);
                 var gif = user.Money * percentage;
-                return user.Money + gif;   
+                return user.Money + gif;
             }
             return user.Money;
         }

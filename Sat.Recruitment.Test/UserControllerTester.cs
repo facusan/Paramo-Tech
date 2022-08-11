@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Sat.Recruitment.Api.Controllers;
-using Sat.Recruitment.Api.Models;
+using Sat.Recruitment.Domain;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,9 +18,20 @@ namespace Sat.Recruitment.Test
     public class UserControllerTester : IClassFixture<WebApplicationFactory<Api.Startup>>
     {
         private readonly HttpClient _client;
+        private readonly WebApplicationFactory<Api.Startup> _factory;
         public UserControllerTester(WebApplicationFactory<Api.Startup> factory)
         {
-            _client = factory.CreateClient();
+            var projectDir = Directory.GetCurrentDirectory();
+            var configPath = Path.Combine(projectDir, "appsettings.json");
+
+            _factory = factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureAppConfiguration((context, conf) =>
+                {
+                    conf.AddJsonFile(configPath);
+                });
+            });
+            _client = _factory.CreateClient();
         }
 
         [Fact]
@@ -57,7 +70,7 @@ namespace Sat.Recruitment.Test
 
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status409Conflict,(int) result.StatusCode);
-            Assert.Equal("The user is duplicated", resultMessage);
+            Assert.Equal($"User {newUser.Email} not created because is duplicated", resultMessage);
         }
 
         [Fact]
