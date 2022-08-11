@@ -1,0 +1,9 @@
+Juan,Juan@marmol.com,+5491154762312,Peru 2464,Normal,1234
+Franco,Franco.Perez@gmail.com,+534645213542,Alvear y Colombres,Premium,112234
+Agustina,Agustina@gmail.com,+534645213542,Garay y Otra Calle,SuperUser,112234
+str3ing,use3r@example.com,strin3g,st3ring,Normal,10
+stsr3ing,usse3r@example.com,strisn3g,sst3ring,Normal,114.24
+str22ing,user22@example.com,string2,stri22ng,Normal,36.0
+strineg,useeer@example.com,stringee,streeing,Normal,369.60
+stri2ng,use1r@example.com,stri11ng,s1tring,Normal,36.0
+string,user@example.com,string,string,Normal,36.0
