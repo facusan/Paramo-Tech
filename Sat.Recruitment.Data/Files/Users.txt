@@ -6,3 +6,4 @@ stsr3ing,usse3r@example.com,strisn3g,sst3ring,Normal,114.24
 str22ing,user22@example.com,string2,stri22ng,Normal,36.0
 strineg,useeer@example.com,stringee,streeing,Normal,369.60
 stri2ng,use1r@example.com,stri11ng,s1tring,Normal,36.0
+string,user@example.com,string,string,Normal,36.0

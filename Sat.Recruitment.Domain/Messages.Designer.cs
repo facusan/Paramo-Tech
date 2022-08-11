@@ -61,7 +61,7 @@ namespace Sat.Recruitment.Domain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [0] created.
+        ///   Looks up a localized string similar to User {0} created.
         /// </summary>
         public static string UserCreated {
             get {
@@ -79,7 +79,7 @@ namespace Sat.Recruitment.Domain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User [0] not created because is duplicated.
+        ///   Looks up a localized string similar to User {0} not created because is duplicated.
         /// </summary>
         public static string UserNotCreatedBecauseIsDuplicated {
             get {

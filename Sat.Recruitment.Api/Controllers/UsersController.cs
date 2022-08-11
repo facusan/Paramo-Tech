@@ -32,7 +32,7 @@ namespace Sat.Recruitment.Api.Controllers
                 {
                     var userNotCreatedBecauseIsDuplicatedMessage = string
                         .Format(Messages.UserNotCreatedBecauseIsDuplicated, user.Email);
-                    _logger.LogError(string.Format(Messages.UserNotCreatedBecauseIsDuplicated, user.Email));
+                    _logger.LogError(userNotCreatedBecauseIsDuplicatedMessage);
                     return Conflict(userNotCreatedBecauseIsDuplicatedMessage);
                 }
 
