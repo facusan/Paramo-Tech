@@ -120,6 +120,9 @@
   <data name="UserCreated" xml:space="preserve">
     <value>User [0] created</value>
   </data>
+  <data name="UserNormalizationError" xml:space="preserve">
+    <value>The user data cannot be normalized</value>
+  </data>
   <data name="UserNotCreatedBecauseIsDuplicated" xml:space="preserve">
     <value>User [0] not created because is duplicated</value>
   </data>

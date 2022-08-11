@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sat.Recruitment.Domain;
+using Sat.Recruitment.Domain.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -39,6 +40,11 @@ namespace Sat.Recruitment.Api.Controllers
                 var userCreatedMessage = string.Format(Messages.UserCreated,user.Email);
                 _logger.LogInformation(userCreatedMessage);
                 return Ok(userCreatedMessage);
+            }
+            catch(UserNormalizationException e)
+            {
+                _logger.LogError(e.ToString());
+                return Conflict(Messages.UserNormalizationError);
             }
             catch(Exception e)
             {

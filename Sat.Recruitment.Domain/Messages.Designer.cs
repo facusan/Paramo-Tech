@@ -70,6 +70,15 @@ namespace Sat.Recruitment.Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user data cannot be normalized.
+        /// </summary>
+        public static string UserNormalizationError {
+            get {
+                return ResourceManager.GetString("UserNormalizationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User [0] not created because is duplicated.
         /// </summary>
         public static string UserNotCreatedBecauseIsDuplicated {

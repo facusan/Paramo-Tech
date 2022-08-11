@@ -1,4 +1,6 @@
-﻿using Sat.Recruitment.Domain.UserMoneyCalculation;
+﻿using Sat.Recruitment.Domain.Exceptions;
+using Sat.Recruitment.Domain.UserMoneyCalculation;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sat.Recruitment.Domain
@@ -36,9 +38,16 @@ namespace Sat.Recruitment.Domain
 
         public void Normalize()
         {
-            SetMoneyCalculationStrategyBasedOnUserType();
-            CalculateFinalMoney();
-            Email = EmailNormalizer.Normalize(Email);
+            try
+            {
+                SetMoneyCalculationStrategyBasedOnUserType();
+                CalculateFinalMoney();
+                Email = EmailNormalizer.Normalize(Email);
+            } catch(Exception e)
+            {
+                throw new UserNormalizationException("Normalize user error",e);
+            }
+
         }
 
         private void SetMoneyCalculationStrategyBasedOnUserType()
