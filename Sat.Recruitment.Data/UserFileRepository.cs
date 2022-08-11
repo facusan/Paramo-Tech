@@ -11,7 +11,7 @@ namespace Sat.Recruitment.Data
     {
         private readonly string _pathFile;
         private const string SeparatorChar = ",";
-        
+
         public UserFileRepository(IConfiguration iConfig)
         {
             _pathFile = Directory.GetCurrentDirectory() + iConfig.GetSection("Settings")["UserFilePath"];

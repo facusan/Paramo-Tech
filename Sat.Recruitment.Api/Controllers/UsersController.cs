@@ -29,13 +29,14 @@ namespace Sat.Recruitment.Api.Controllers
                 var isDuplicated = await _userRepository.ExistsAsync(user);
                 if(isDuplicated)
                 {
-                    var userNotCreatedBecauseIsDuplicatedMessage = $"User {user.Email} not created because is duplicated";
-                    _logger.LogError(userNotCreatedBecauseIsDuplicatedMessage, user);
+                    var userNotCreatedBecauseIsDuplicatedMessage = string
+                        .Format(Messages.UserNotCreatedBecauseIsDuplicated, user.Email);
+                    _logger.LogError(string.Format(Messages.UserNotCreatedBecauseIsDuplicated, user.Email));
                     return Conflict(userNotCreatedBecauseIsDuplicatedMessage);
                 }
 
                 _userRepository.Add(user);
-                var userCreatedMessage = $"User {user.Email} created";
+                var userCreatedMessage = string.Format(Messages.UserCreated,user.Email);
                 _logger.LogInformation(userCreatedMessage);
                 return Ok(userCreatedMessage);
             }
